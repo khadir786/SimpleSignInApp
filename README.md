@@ -7,7 +7,7 @@ If they don't, the user is prompted to try again.
 ## Changelog
 
 **03/07/2024** 
--- Completed inital logic for the program
+- Completed initial logic for the program
 
 ### Current Ideas for Additional Features
-Add an internal attempt counter, where the user is locked out after specific number of incorrect attempts
+- Add an internal attempt counter, where the user is locked out after specific number of incorrect attempts
