@@ -2,50 +2,88 @@
 // User will be prompted for their username and password
 // If it matches an already defined set, access is granted
 // Otherwise, access is denied
+// The user can also choose to swap between registering and signing in
+
+using SignIn;
+
+string currentPage = "login";
 
 const string realUsername = "ruby_qube";
 const string realPassword = "tang0Orange93";
-
-
-Console.WriteLine("Welcome to the sign in page.\n");
-Console.WriteLine("Please enter your username and password\n");
-Console.WriteLine("NOTE: You username and password must not be empty!\n");
+const string welcomeMessage = """
+                              Welcome to the sign in page
+                              Please enter your username and password
+                              NOTE: You username and password must not be empty!
+                              """;
 
 bool inputCheck = false;
 byte attempts = 5;
 
+Console.WriteLine(welcomeMessage);
+Console.WriteLine("Type \"register\" in the username field to switch to the registration page\n");
 Console.WriteLine($"You have {attempts} attempts\n");
+while ((!inputCheck && attempts != 0))
 
-while (!inputCheck && attempts != 0)
 {
-    Console.WriteLine("Username:");
-    string? inputUsername = Console.ReadLine();
-    Console.WriteLine("\nPassword:");
-    string? inputPassword = Console.ReadLine();
-
-
-    //Console.WriteLine($"You have entered: {inputUsername} and {inputPassword}");
-
-    // checks if username or password are not a valid input,
-    // if not, then checks if username and password are correct
-    // if yes, loop condition is broken
-    // otherwise, it is a bad attempt and have one less attempt
-    if (string.IsNullOrEmpty(inputUsername) || string.IsNullOrEmpty(inputPassword))
+    // If the current page is 'login', the user is prompted for a username and password
+    // The inputs are validated, and 
+    if (currentPage.Equals("login"))
     {
-        Console.WriteLine("Username and/or password is empty!\n");
-        Console.WriteLine("Please enter a username and password that are not empty\n");
-    }
-    else if ((inputUsername.Equals(realUsername) && inputPassword.Equals(realPassword)))
-    {
-        inputCheck = true;
+        Console.WriteLine("Username:");
+        string? inputUsername = Console.ReadLine();
+        if (!Validation.InputValidateUsername(inputUsername)) continue;
+
+        if (inputUsername.Equals("!register"))
+        {
+            currentPage = "register";
+            Console.WriteLine("Switching to the registration page...\n");
+            Console.WriteLine(welcomeMessage);
+            Console.WriteLine("Type \"!login\" in the username field to switch the sign in page");
+        }
+        else if (inputUsername.Equals("!login")) Console.WriteLine("You are already on the sign in page!\n");
+        else
+        {
+            Console.WriteLine("\nPassword:");
+            string? inputPassword = Console.ReadLine();
+
+
+            if (!Validation.InputValidatePassword(inputPassword)) continue;
+
+            if (inputUsername.Equals(realUsername) && inputPassword.Equals(realPassword)) inputCheck = true;
+            else
+            {
+                Console.WriteLine("\nUsername or password is incorrect");
+                Console.WriteLine("Please try again\n");
+                attempts--;
+                Console.WriteLine($"You have {attempts} attempts left");
+            }
+        }
     }
     else
     {
-        Console.WriteLine("\nUsername or password is incorrect");
-        Console.WriteLine("Please try again\n");
-        attempts--;
-        Console.WriteLine($"You have {attempts} attempts left");
+        Console.WriteLine("\nWhat will your username be? ");
+        string? inputUsername = Console.ReadLine();
+        if (!Validation.InputValidateUsername(inputUsername)) continue;
+
+        if (inputUsername.Equals("!login"))
+        {
+            currentPage = "login";
+            Console.WriteLine("Switching to the sign in page...\n");
+            Console.WriteLine(welcomeMessage);
+            Console.WriteLine("Type \"!register\" in the username field to switch the registration page");
+        }
+        else if (inputUsername.Equals("!login")) Console.WriteLine("You are already on the sign in page!\n");
+        else
+        {
+            Console.WriteLine("\nWhat will your password be?");
+            string? inputPassword = Console.ReadLine();
+
+
+            Validation.InputValidatePassword(inputPassword);
+        }
     }
+
+
 }
 
 // Message depending on if user inputs correct password or used all allotted attempts
