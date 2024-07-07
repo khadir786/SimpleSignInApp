@@ -12,4 +12,24 @@ public class Validation
         }
         return true;
     }
+    public static bool InputValidateUsername(string? inputUsername)
+    {
+        if (string.IsNullOrEmpty(inputUsername))
+        {
+            Console.WriteLine("Username is empty!\n");
+            Console.WriteLine("Please enter a username that is not empty\n");
+            return false;
+        }
+        return true;
+    } 
+    public static bool InputValidatePassword(string? inputPassword)
+    {
+        if (string.IsNullOrEmpty(inputPassword))
+        {
+            Console.WriteLine("Password is empty!\n");
+            Console.WriteLine("Please enter a password that is not empty\n");
+            return false;
+        }
+        return true;
+    }
 }
