@@ -8,16 +8,20 @@ using SignIn;
 
 string currentPage = "login";
 
-const string realUsername = "ruby_qube";
-const string realPassword = "tang0Orange93";
+
 const string welcomeMessage = """
                               Welcome to the sign in page
                               Please enter your username and password
                               NOTE: You username and password must not be empty!
+                              
                               """;
 
 bool inputCheck = false;
 byte attempts = 5;
+Dictionary<string, string> users = new Dictionary<string, string>();
+users.Add("ruby_qube", "tang0Orange93");
+
+
 
 Console.WriteLine(welcomeMessage);
 Console.WriteLine("Type \"register\" in the username field to switch to the registration page\n");
@@ -51,7 +55,7 @@ while ((!inputCheck && attempts != 0))
 
             if (!Validation.InputValidatePassword(inputPassword)) continue;
 
-            if (inputUsername.Equals(realUsername) && inputPassword.Equals(realPassword)) inputCheck = true;
+            if (users.ContainsKey(inputUsername) && users.ContainsValue(inputPassword)) inputCheck = true;
             else
             {
                 Console.WriteLine("\nUsername or password is incorrect");
@@ -77,14 +81,16 @@ while ((!inputCheck && attempts != 0))
             Console.WriteLine(welcomeMessage);
             Console.WriteLine("Type \"!register\" in the username field to switch the registration page");
         }
-        else if (inputUsername.Equals("!login")) Console.WriteLine("You are already on the sign in page!\n");
+        else if (inputUsername.Equals("!register")) Console.WriteLine("You are already on the sign in page!\n");
         else
         {
             Console.WriteLine("\nWhat will your password be?");
             string? inputPassword = Console.ReadLine();
 
 
-            Validation.InputValidatePassword(inputPassword);
+            if (!Validation.InputValidatePassword(inputPassword)) continue;
+            users.Add(inputUsername, inputPassword);
+            Console.WriteLine($"User {inputUsername} added successfully!");
         }
     }
 
