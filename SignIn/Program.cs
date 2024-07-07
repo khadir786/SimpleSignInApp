@@ -3,8 +3,8 @@
 // If it matches an already defined set, access is granted
 // Otherwise, access is denied
 
-string realUsername = "ruby_qube";
-string realPassword = "tang0Orange93";
+const string realUsername = "ruby_qube";
+const string realPassword = "tang0Orange93";
 
 
 Console.WriteLine("Welcome to the sign in page.\n");
