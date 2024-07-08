@@ -34,9 +34,11 @@ while ((!inputCheck && attempts != 0))
     {
         Console.WriteLine("Username:");
         string? inputUsername = Console.ReadLine();
+
         // Check if username is valid (not empty or null)
         // If not, warning messages are shown and user is prompted again
         if (!Validation.InputValidateUsername(inputUsername)) continue;
+
         // If the user inputs the "!register" command, they are taken to the registration page
         if (inputUsername.Equals("!register"))
         {
@@ -46,6 +48,7 @@ while ((!inputCheck && attempts != 0))
             Console.WriteLine("Type \"!login\" in the username field to switch the sign in page");
         }
         else if (inputUsername.Equals("!login")) Console.WriteLine("You are already on the sign in page!\n");
+
         // Any other input is categorised as incorrect, warning messages are shown with attempt counter
         else
         {
@@ -70,9 +73,11 @@ while ((!inputCheck && attempts != 0))
         // Registration page
         Console.WriteLine("\nWhat will your username be? ");
         string? inputUsername = Console.ReadLine();
+
         // Check if username is valid (not empty or null)
         // If not, warning messages are shown and user is prompted again
         if (!Validation.InputValidateUsername(inputUsername)) continue;
+
         // If the user inputs the "!login" command, they are taken to the sign in page
         if (inputUsername.Equals("!login"))
         {
