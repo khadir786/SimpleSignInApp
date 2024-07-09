@@ -8,7 +8,6 @@ using SignIn;
 
 string currentPage = "login";
 
-
 const string welcomeMessage = """
                               Welcome to the sign in page
                               Please enter your username and password
@@ -21,11 +20,10 @@ byte attempts = 5;
 Dictionary<string, string> users = new Dictionary<string, string>();
 users.Add("ruby_qube", "tang0Orange93");
 
-
-
 Console.WriteLine(welcomeMessage);
 Console.WriteLine("Type \"register\" in the username field to switch to the registration page\n");
 Console.WriteLine($"You have {attempts} attempts\n");
+
 while ((!inputCheck && attempts != 0))
 
 {
@@ -43,6 +41,7 @@ while ((!inputCheck && attempts != 0))
         if (inputUsername.Equals("!register"))
         {
             currentPage = "register";
+
             Console.WriteLine("Switching to the registration page...\n");
             Console.WriteLine(welcomeMessage);
             Console.WriteLine("Type \"!login\" in the username field to switch the sign in page");
@@ -56,13 +55,15 @@ while ((!inputCheck && attempts != 0))
             string? inputPassword = Console.ReadLine();
 
 
-            if (!Validation.InputValidatePassword(inputPassword)) continue;
-
-            if (users.ContainsKey(inputUsername) && users.ContainsValue(inputPassword)) inputCheck = true;
+            if (!Validation.InputValidatePassword(inputPassword)) 
+                continue;
+            if (users.ContainsKey(inputUsername) && users.ContainsValue(inputPassword)) 
+                inputCheck = true;
             else
             {
                 Console.WriteLine("\nUsername or password is incorrect");
                 Console.WriteLine("Please try again\n");
+
                 attempts--;
                 Console.WriteLine($"You have {attempts} attempts left");
             }
@@ -82,18 +83,21 @@ while ((!inputCheck && attempts != 0))
         if (inputUsername.Equals("!login"))
         {
             currentPage = "login";
+
             Console.WriteLine("Switching to the sign in page...\n");
             Console.WriteLine(welcomeMessage);
             Console.WriteLine("Type \"!register\" in the username field to switch the registration page");
         }
-        else if (inputUsername.Equals("!register")) Console.WriteLine("You are already on the sign in page!\n");
+        else if (inputUsername.Equals("!register")) 
+            Console.WriteLine("You are already on the sign in page!\n");
         else
         {
             Console.WriteLine("\nWhat will your password be?");
             string? inputPassword = Console.ReadLine();
 
 
-            if (!Validation.InputValidatePassword(inputPassword)) continue;
+            if (!Validation.InputValidatePassword(inputPassword)) 
+                continue;
             users.Add(inputUsername, inputPassword);
             Console.WriteLine($"User {inputUsername} added successfully!");
         }
