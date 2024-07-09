@@ -1,113 +1,131 @@
 ﻿// Simple sign in program
-// User will be prompted for their username and password
-// If it matches an already defined set, access is granted
-// Otherwise, access is denied
-// The user can also choose to swap between registering and signing in
+// User can choose between registering and logging in
 
+// For registering
+    // User will be prompted for their username and password
+    // User will then be added to a collection of users
+
+// For logging in
+    // User will be prompted for their username and password
+    // If it matches an already defined set, access is granted
+    // Otherwise, access is denied
+
+
+using System.Runtime.Serialization.Formatters;
 using SignIn;
 
-string currentPage = "login";
-
-const string welcomeMessage = """
-                              Welcome to the sign in page
-                              Please enter your username and password
-                              NOTE: You username and password must not be empty!
-                              
-                              """;
-
+string menuSelection = "";
 bool inputCheck = false;
 byte attempts = 5;
 Dictionary<string, string> users = new Dictionary<string, string>();
 users.Add("ruby_qube", "tang0Orange93");
 
-Console.WriteLine(welcomeMessage);
-Console.WriteLine("Type \"register\" in the username field to switch to the registration page\n");
-Console.WriteLine($"You have {attempts} attempts\n");
-
-while ((!inputCheck && attempts != 0))
-
+// menu will keep popping up until the user types exit, or they have no more login attempts
+do
 {
-    // If the current page is 'login', the user is prompted for a username and password
-    if (currentPage.Equals("login"))
+    Console.WriteLine("""
+                      Welcome to sign in program!
+                      Your options are:
+                      1. Register 
+                      2. Login
+                      """);
+
+    Console.WriteLine("Enter your selection number or type Exit to exit the program");
+    string? readResult = Console.ReadLine();
+    if (!string.IsNullOrEmpty(readResult))
     {
-        Console.WriteLine("Username:");
-        string? inputUsername = Console.ReadLine();
+        menuSelection = readResult.ToLower();
+    }
 
-        // Check if username is valid (not empty or null)
-        // If not, warning messages are shown and user is prompted again
-        if (!Validation.InputValidateUsername(inputUsername)) continue;
+    bool validEntry = false;
+    string? inputUsername;
+    string? inputPassword;
+    switch (menuSelection)
+    {
+        case "1":
+            Console.WriteLine("""
+                              
+                              Welcome to the register page
+                              Please enter your username and password
+                              NOTE: You username and password must not be empty!
 
-        // If the user inputs the "!register" command, they are taken to the registration page
-        if (inputUsername.Equals("!register"))
-        {
-            currentPage = "register";
+                              """);
 
-            Console.WriteLine("Switching to the registration page...\n");
-            Console.WriteLine(welcomeMessage);
-            Console.WriteLine("Type \"!login\" in the username field to switch the sign in page");
-        }
-        else if (inputUsername.Equals("!login")) Console.WriteLine("You are already on the sign in page!\n");
-
-        // Any other input is categorised as incorrect, warning messages are shown with attempt counter
-        else
-        {
-            Console.WriteLine("\nPassword:");
-            string? inputPassword = Console.ReadLine();
-
-
-            if (!Validation.InputValidatePassword(inputPassword)) 
-                continue;
-            if (users.ContainsKey(inputUsername) && users.ContainsValue(inputPassword)) 
-                inputCheck = true;
-            else
+            do
             {
-                Console.WriteLine("\nUsername or password is incorrect");
-                Console.WriteLine("Please try again\n");
+                Console.WriteLine("Enter your username: ");
+                inputUsername = Console.ReadLine();
+                validEntry = Validation.InputValidateUsername(inputUsername);
+            } while (!validEntry);
 
-                attempts--;
-                Console.WriteLine($"You have {attempts} attempts left");
-            }
-        }
-    }
-    else
-    {
-        // Registration page
-        Console.WriteLine("\nWhat will your username be? ");
-        string? inputUsername = Console.ReadLine();
+            do
+            {
+                Console.WriteLine("Enter your password: ");
+                inputPassword = Console.ReadLine();
+                validEntry = Validation.InputValidatePassword(inputPassword);
+            } while (!validEntry);
 
-        // Check if username is valid (not empty or null)
-        // If not, warning messages are shown and user is prompted again
-        if (!Validation.InputValidateUsername(inputUsername)) continue;
-
-        // If the user inputs the "!login" command, they are taken to the sign in page
-        if (inputUsername.Equals("!login"))
-        {
-            currentPage = "login";
-
-            Console.WriteLine("Switching to the sign in page...\n");
-            Console.WriteLine(welcomeMessage);
-            Console.WriteLine("Type \"!register\" in the username field to switch the registration page");
-        }
-        else if (inputUsername.Equals("!register")) 
-            Console.WriteLine("You are already on the sign in page!\n");
-        else
-        {
-            Console.WriteLine("\nWhat will your password be?");
-            string? inputPassword = Console.ReadLine();
-
-
-            if (!Validation.InputValidatePassword(inputPassword)) 
-                continue;
             users.Add(inputUsername, inputPassword);
-            Console.WriteLine($"User {inputUsername} added successfully!");
-        }
+            Console.WriteLine($"\nThe user {inputUsername} has successfully been added!");
+            Console.WriteLine("You may now choose to login\n");
+            break;
+
+        case "2":
+            Console.WriteLine("""
+                              Welcome to the login page
+                              Please enter your username and password
+                              NOTE: You username and password must not be empty!
+
+                              """);
+            Console.WriteLine($"You have {attempts} attempts\n");
+            while (!inputCheck && attempts > 0)
+            {
+                do
+                {
+                    Console.WriteLine("Enter your username: ");
+                    inputUsername = Console.ReadLine();
+                    menuSelection = inputUsername;
+
+                    validEntry = Validation.InputValidateUsername(inputUsername);
+                } while (!validEntry);
+
+                do
+                {
+                    Console.WriteLine("Enter your password: ");
+                    inputPassword = Console.ReadLine();
+                    menuSelection = inputUsername;
+
+                    validEntry = Validation.InputValidatePassword(inputPassword);
+                } while (!validEntry);
+                if (users.ContainsKey(inputUsername) && users.ContainsValue(inputPassword))
+                {
+                    Console.WriteLine("Access granted!");
+                    inputCheck = true;
+                }
+
+                else
+                {
+                    Console.WriteLine("\nUsername or password is incorrect");
+                    Console.WriteLine("Please try again\n");
+
+                    attempts--;
+                    Console.WriteLine($"You have {attempts} attempts left");
+                }
+
+            }
+            break;
+
+        default:
+            break;
     }
 
 
-}
 
-// Message depending on if user inputs correct password or used all allotted attempts
-Console.WriteLine(attempts <= 0 ? "You have used all of your attempts and are now locked out." : "Access granted!");
+} while (menuSelection != "exit" && attempts > 0 && !inputCheck);
+
+if (attempts <= 0)
+    Console.WriteLine("You have no attempts left and are now locked out");
+
 
 
 
